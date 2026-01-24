@@ -8,17 +8,16 @@ function App() {
   const [url, setUrl] = useState("")
   const [response, setResponse] = useState(null)
 
-  // Just to wake up backend (Render sleep issue)
   useEffect(() => {
     axios.get('https://url-shortner-ar5p.onrender.com')
       .then(() => console.log("Backend reachable"))
-      .catch(() => console.log("Backend not reachable"))
+      .catch(err => console.error("Backend not reachable", err))
   }, [])
 
   const handleShorten = async () => {
-    console.log("Button clicked, URL:", url)
+    console.log("CLICKED. URL =", url)
 
-    if (!url) {
+    if (!url.trim()) {
       alert("Please enter a URL")
       return
     }
@@ -29,7 +28,7 @@ function App() {
         { originalUrl: url }
       )
 
-      console.log("Backend response:", res.data)
+      console.log("RESPONSE:", res.data)
 
       setResponse({
         status: res.status,
@@ -38,15 +37,11 @@ function App() {
           message: "Short URL generated successfully"
         }
       })
-
     } catch (err) {
-      console.error("API error:", err)
-
+      console.error("ERROR:", err)
       setResponse({
         status: err.response?.status || 500,
-        data: {
-          message: "Something went wrong"
-        }
+        data: { message: "Something went wrong" }
       })
     }
   }
@@ -60,15 +55,12 @@ function App() {
           type="text"
           className='input-area'
           placeholder='Paste the URL here'
+          value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
 
-        {/* ONLY CHANGE THAT FIXES EVERYTHING */}
-        <button
-          type="button"
-          className='button'
-          onClick={handleShorten}
-        >
+        {/* 🔥 REAL BUTTON — SAME CSS */}
+        <button className='button' onClick={handleShorten}>
           Shorten URL
         </button>
       </div>
