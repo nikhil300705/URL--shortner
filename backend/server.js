@@ -1,9 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const urlRoutes = require("./routes/urlRoutes");
 
 const app = express();
+
+/* 🔥 THIS IS THE FIX */
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"]
+}));
 
 app.use(express.json());
 
