@@ -17,8 +17,7 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-mongoose
-  .connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("MongoDB connected");
     app.listen(PORT, () => {
