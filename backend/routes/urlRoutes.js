@@ -9,15 +9,20 @@ router.post("/shorten", shortenUrlHandler);
 
 // REDIRECT
 router.get("/:shortId", async (req, res) => {
-  const { shortId } = req.params;
+  try {
+    const { shortId } = req.params;
 
-  const url = await Url.findOne({ shortId });
+    const url = await Url.findOne({ shortId });
 
-  if (!url) {
-    return res.status(404).json({ message: "Short URL not found" });
+    if (!url) {
+      return res.status(404).send("Short URL not found");
+    }
+
+    return res.redirect(url.originalUrl);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
   }
-
-  res.redirect(url.originalUrl);
 });
 
 
